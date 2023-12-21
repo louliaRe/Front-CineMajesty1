@@ -30,7 +30,5 @@ class RateController extends Controller
             return redirect('/')->with('thank you for rating the film');    
         }
     }
-    public function update(Request $request){
-        
-    }
+   
 }
