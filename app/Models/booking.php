@@ -21,7 +21,7 @@ class Booking extends Model
     }
     public function Snacks(){
 
-        return $this->belongstomany(Snack::class,'Book_Snack','B_id','S_id')->withtimestamp()->withpivot('Qty');
+        return $this->belongstomany(Snack::class,'Book_Snack','B_id','S_id');
     }
     public function BookingQueue(){
         return $this->HasMany(BookingQueue::class,'B_id','B_id');

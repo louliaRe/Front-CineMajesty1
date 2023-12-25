@@ -16,7 +16,7 @@ class CreateSnackBuyingTable extends Migration
             $table->bigIncrements('SB_id');
             $table->unsignedBigInteger('S_id'); // Assuming this is a foreign key to the snack table
             $table->unsignedBigInteger('B_id'); // Assuming this is a foreign key to the booking table
-            $table->integer('Qty');
+            $table->integer('Qty')->nullable();
             
             
             // Define foreign key constraints for S_id and B_id

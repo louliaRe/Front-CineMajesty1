@@ -125,6 +125,9 @@ Route::post('/rate/film/{F_id}',[App\Http\Controllers\RateController::class,'Rat
 Route::get('/bookings',[App\Http\Controllers\BookingController::class,'index'])->name('booking.index');
 Route::get('/bookings/update/{B_id}',[App\Http\Controllers\BookingController::class,'update'])->name('booking.update');
 Route::delete('/bookings/delete/{B_id}',[App\Http\Controllers\BookingController::class,'delete'])->name('booking.delete');
+Route::get('/bookings/edit/{B_id}/{SHT_id}/{H_id}',[App\Http\Controllers\BookingController::class,'edit'])->name('booking.edit');
+Route::put('/bookings/update/{B_id}/{H_id}/{SHT_id}',[App\Http\Controllers\BookingController::class,'update'])->name('booking.update');
+
 
 
 });

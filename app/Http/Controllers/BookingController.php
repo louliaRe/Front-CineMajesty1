@@ -37,6 +37,7 @@ class BookingController extends Controller
     ->where('bookings.C_id', $C_id)
     ->get();
    
+   
     return view('booking.index',compact('bookings'));
 
   }
@@ -269,7 +270,7 @@ class BookingController extends Controller
   
   $booking=Booking::where('bookings.B_id',$B_id)->first();
 
-  $created_at=Carbon::parse($booking->created_at)->addHours(24);
+  $created_at=Carbon::parse($booking->created_at)->addHours(12);
   
   $snacks=Snack::join('book_snack','snacks.S_id','=','book_snack.S_id')
   ->join('bookings','bookings.B_id','=','book_snack.B_id')
@@ -323,4 +324,181 @@ class BookingController extends Controller
   }
   
 }
+public function edit($B_id,$SHT_id,$H_id){
+    $seats=SeatShowtime::join('hall_showtime','hall_showtime.HS_id','=','seat_showtime.HS_id')
+    ->join('show_times','show_times.SHT_id','=','hall_showtime.SHT_id')
+    ->where('hall_showtime.SHT_id',$SHT_id)
+    ->where('hall_showtime.H_id',$H_id)    
+    ->get();
+  $snacks=Snack::orderBy('name')->get();
+  $booked_seats=SeatShowtime::join('tickets','tickets.SS_id','=','seat_showtime.SS_id')
+  ->join('bookings','bookings.B_id','=','tickets.B_id')
+  ->where('bookings.B_id',$B_id)
+  ->get();
+  $booked_snacks=Snack::join('book_snack','book_snack.S_id','=','snacks.S_id')
+  ->join('bookings','bookings.B_id','=','book_snack.B_id')
+  ->where('bookings.B_id',$B_id)
+  ->get();
+ 
+  return view ('booking.update',compact('seats','snacks','booked_snacks','booked_seats','B_id','H_id','SHT_id'));
+}
+
+   
+public function update($B_id,$H_id,$SHT_id,Request $request){
+
+ 
+ $booking_seats=SeatShowtime::join('tickets','tickets.SS_id','=','seat_showtime.SS_id')
+->join('Bookings','Bookings.B_id','=','tickets.B_id')
+->where('bookings.B_id',$B_id)
+->get();
+
+$booking_snacks=Snack::join('book_snack','book_snack.S_id','=','snacks.S_id')
+->join('bookings','bookings.B_id','=','book_snack.B_id')
+->where('bookings.B_id',$B_id)
+->get();
+
+$booking=Booking::where('B_id',$B_id)->first();
+
+$created_at=Carbon::parse($booking->created_at)->addHours(24);
+$current_date=Carbon::now();
+
+
+$price=Hall::where('H_id',$H_id)->first()->price;
+
+
+$email=auth()->user()->email;
+$customer=Customer::where('email',$email)->first();
+$wallet=Wallet::where('C_id',$customer->C_id)->first();
+
+$new_booked_seats=$request->input('SS_id');
+$new_booked_snacks=$request->input('qty');
+if($created_at <= $current_date){
+ DB::beginTransaction();
+ //seats
+ if($new_booked_seats && $new_booked_snacks){
+  $updatedSeats = [];
+  $old_seats=[];  
+
+ foreach($new_booked_seats as $seat){
+  $updatedSeats[] = $seat ;
+ }
+
+ foreach($booking_seats as $seat){
+  
+  $old_seats[] = strval($seat->SS_id);
+ }
+ $num_new_seats=count($updatedSeats);
+ $seat_total=$num_new_seats * $price;
+ $showtime_offers=PublicOffer::join('show_times','show_times.PU_id','=','public_offers.PU_id')->where('show_times.SHT_id',$SHT_id)->first();
+
+ if($showtime_offers){
+$seat_total=$seat_total/$showtime_offers->amount;
+ }
+
+
+
+ foreach($updatedSeats as $updatedSeat){
+ 
+    $new_seat=SeatShowtime::where('SS_id',$updatedSeat)->first();
+    if(!in_array($updatedSeat,$old_seats) && $new_seat->status == 'available'){
+      $ticket=Ticket::create([
+            'B_id'=>$B_id,
+            'SS_id'=>$updatedSeat
+          ]);
+        
+          $new_seat->update(['status'=>'booked']);
+          $new_seat->save();    
   }
+  
+}
+
+  foreach($booking_seats  as $booking_seat){
+  
+    if(!in_array($booking_seat->SS_id,$updatedSeats)){
+      $old_seat=SeatShowtime::where('SS_id',$booking_seat->SS_id)->first();
+      
+      $old_seat->update(['status'=>'available']);
+      $old_seat->save();
+      Ticket::join('seat_showtime','seat_showtime.SS_id','=','tickets.SS_id')
+      ->where('tickets.SS_id',$old_seat->SS_id)
+      ->delete();
+      
+    }
+
+  }
+//snacks
+  foreach($request->input('qty') as $key=>$value){
+    $snack=Snack::find($key);
+    
+      foreach($booking_snacks as $booking_snack){
+       $snack_price=$snack->price;
+       $snack_total=$snack_price * $value;  
+       if($value > $booking_snack->Qty)  {
+        $new_Qty=$value-$booking_snack->Qty;
+        $booking_snack->update(['qty'=>$booking_snack->qty - $new_Qty]);
+        $booking_snack->save(); 
+
+       }
+       elseif($value < $booking_snack->Qty){
+        $new_Qty=$booking_snack->Qty-$value;
+        $booking_snack->update(['qty'=>$booking_snack->qty + $new_Qty]);
+        $booking_snack->save(); 
+       }
+       
+       $booking->Snacks()->updateExistingPivot($key,['Qty'=>$value]);  
+     
+      
+    }
+  
+
+  }
+ 
+
+  $snack_offer=PublicOffer::join('offer_snack','offer_snack.PU_id','=','public_offers.PU_id')
+  ->join('snacks','snacks.S_id','=','offer_snack.S_id')
+  ->where('offer_snack.S_id',$snack->S_id)
+  ->where('public_offers.start_date','<=',$current_date)
+  ->where('public_offers.expire_date','>=',$current_date)
+  ->first();
+
+  if($snack_offer){
+   
+
+    if($current_date < $snack_offer->expire_date && $current_date > $snack_offer->start_date){
+
+      $snack_total=$snack_total/$snack_offer->amount;
+      
+    }
+  }
+
+  $new_total=$snack_total+$seat_total;
+  if($booking->total > $new_total){
+
+    $differance = $booking->total - $new_total;
+    $wallet->update(['amount'=>$wallet->amount + $differance]);
+    $wallet->save();
+  }
+  elseif($booking->total < $new_total){
+    $differance =   $new_total - $booking->total;
+    $wallet->update(['amount'=>$wallet->amount - $differance]);
+    $wallet->save();
+  }
+
+  $booking->update(['total'=>$new_total]);
+  $booking->save();  
+  DB::commit();
+}
+else{
+  DB::rollback();
+  return redirect('/')->with('error','please choose carfully');
+  
+}
+
+return redirect('/')->with('success','complete');
+}
+else{
+  return redirect('/')->with('error','you r late');
+  
+}
+  }
+}

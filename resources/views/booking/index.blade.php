@@ -9,9 +9,9 @@
             <th>film name </th>
             <th>date</th>
             <th>start time</th>
-            <th>seat booked</th>
             <th>hall</th>
-            <th>action</th>
+            <th>delete</th>
+            <th>update</th>
 
        
         </tr>
@@ -27,10 +27,8 @@
                 <td>{{ $booking->start_date}}</td>
                 
                 <td>{{ $booking->start_time }}</td>
-                <td><a href="{{route('booking.update',['B_id'=>$booking->B_id])}}">
-                  {{$booking->SE_id}}
-                  </a>
-                </td>
+                
+                
                 <td>{{ $booking->H_id}} </td>
                
                 <td>
@@ -39,6 +37,12 @@
                    @method('DELETE')
                    <button type="submit">delete</button>
                     </form>
+                </td>
+                <td>
+                <form action="{{route('booking.edit',['B_id'=>$booking->B_id,'SHT_id'=>$booking->SHT_id,'H_id'=>$booking->H_id])}}" method="GET">
+                    @csrf
+                  
+                   <button type="submit">update</button>
                 </td>
              
             </td>
