@@ -82,8 +82,12 @@ Route::middleware(['employee'])->group(function ()
     //offers Routes
 
     Route::get('employee/offers',[App\Http\Controllers\OfferController::class,'index'])->name('offers.show'); 
-    Route::get('employee/offers/create',[App\Http\Controllers\OfferController::class,'create'])->name('offers.create'); 
-    Route::post('employee/offers/store',[App\Http\Controllers\OfferController::class,'store'])->name('offers.store'); 
+    Route::get('employee/offers/snack/discount',[App\Http\Controllers\OfferController::class,'create_snack_offer_discount'])->name('SnackDiscountoffers.show');
+    Route::post('employee/offers/snack/discount',[App\Http\Controllers\OfferController::class,'store_snack_discount'])->name('SnackDiscountoffers.store'); 
+    Route::get('employee/offers/snack/create/{S_id}',[App\Http\Controllers\OfferController::class,'create_snack_offer'])->name('Snackoffers.create'); 
+    Route::get('employee/offers/show/create/{SHT_id}',[App\Http\Controllers\OfferController::class,'create_show_offer'])->name('Showoffers.create');
+    Route::post('employee/offers/show/store/{SHT_id}',[App\Http\Controllers\OfferController::class,'store_show'])->name('Showoffers.store'); 
+    Route::post('employee/offers/snack/{S_id}',[App\Http\Controllers\OfferController::class,'store_snack'])->name('Snackoffers.store'); 
 
 
  //hall routes
@@ -124,9 +128,9 @@ Route::post('/rate',[App\Http\Controllers\RateController::class,'Rate'])->name('
 Route::post('/rate/film/{F_id}',[App\Http\Controllers\RateController::class,'RateFilm'])->name('rate.film');
 Route::get('/bookings',[App\Http\Controllers\BookingController::class,'index'])->name('booking.index');
 Route::get('/bookings/update/{B_id}',[App\Http\Controllers\BookingController::class,'update'])->name('booking.update');
-Route::delete('/bookings/delete/{B_id}',[App\Http\Controllers\BookingController::class,'delete'])->name('booking.delete');
-Route::get('/bookings/edit/{B_id}/{SHT_id}/{H_id}',[App\Http\Controllers\BookingController::class,'edit'])->name('booking.edit');
-Route::put('/bookings/update/{B_id}/{H_id}/{SHT_id}',[App\Http\Controllers\BookingController::class,'update'])->name('booking.update');
+Route::delete('/bookings/delete/{B_id}/{F_id}',[App\Http\Controllers\BookingController::class,'delete'])->name('booking.delete');
+Route::get('/bookings/edit/{B_id}/{SHT_id}/{H_id}/{F_id}',[App\Http\Controllers\BookingController::class,'edit'])->name('booking.edit');
+Route::put('/bookings/update/{B_id}/{H_id}/{SHT_id}/{F_id}',[App\Http\Controllers\BookingController::class,'update'])->name('booking.update');
 
 
 

@@ -59,7 +59,14 @@ public function store(Request $request)
         'release_date' => 'required|date',
        
     ]);
-   
+   $edit=$request->input('editable');
+  $value=0;
+  if($edit == 'no'){
+    $value = 0 ;
+  }
+  else{
+    $value = 1;
+  }
 
     $fil_check=Film::where('name',$data['name'])->first();
 
@@ -71,6 +78,9 @@ public function store(Request $request)
         'age_req' => $data['age_req'],
         'release_date' => $data['release_date'],
         'duration' => $data['duration'],
+        'value_cut'=>$request -> input('value_cut'),
+        'time_allowed'=>$request -> input('time_allowed'),
+        'editable'=> $value
     ]);
 
   $film->save();

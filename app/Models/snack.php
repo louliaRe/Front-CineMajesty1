@@ -16,6 +16,11 @@ class Snack extends Model
 
         return $this->belongsToMany(PublicOffer::class,'offer_snack','S_id','PU_id');
     }
+    public function FreeOffer(){
+
+        return $this->hasOne(FreeOffer::class,'S_id','S_id');
+    }
+
    
 
     public function Bookings(){

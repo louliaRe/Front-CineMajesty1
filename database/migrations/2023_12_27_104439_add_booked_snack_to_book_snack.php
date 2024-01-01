@@ -13,16 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('public_offers', function (Blueprint $table) {
-            $table->bigIncrements('PU_id');
-            $table->date('start_date');
-            $table->date('expire_date');
-            $table->integer('amount');
-            $table->timestamps();
-
-            
-           
-
+        Schema::table('book_snack', function (Blueprint $table) {
+            $table->integer('book_snack')->nullable();
         });
     }
 
@@ -33,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('offers');
+        Schema::table('book_snack', function (Blueprint $table) {
+           
+        });
     }
 };

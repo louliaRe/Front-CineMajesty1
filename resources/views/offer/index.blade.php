@@ -2,26 +2,6 @@
 
 @section('content')
 
-<table>
-    <thead>
-        <tr>
-            <th>customer ID</th>
-            
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($customers as $customer)
-            <tr>
-          
-                <td>
-                <a href="{{ route('offers.create')}}">
-                    {{ $customer->C_id }}
-                </a></td>
-               
-            </tr>
-        @endforeach
-    </tbody>
-</table>
 
 
 <table>
@@ -38,7 +18,7 @@
             <tr>
           
                 <td>
-                <a href="{{ route('offers.create')}}">
+                <a href="{{ route('Showoffers.create',['SHT_id'=>$showtime->SHT_id])}}">
                     {{ $showtime->SHT_id }}
                 </a></td>
                 <td>
@@ -69,7 +49,7 @@
             <tr>
           
                 <td>
-                <a href="{{ route('offers.create')}}">
+                <a href="{{ route('Snackoffers.create',['S_id'=>$snack->S_id])}}">
                     {{ $snack->S_id }}
                 </a></td>
                 <td>

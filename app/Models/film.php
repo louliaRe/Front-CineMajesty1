@@ -50,5 +50,5 @@ class Film extends Model
         return $this->hasMany(Image::class,'F_id','F_id');
     }
 
-    protected $fillable=['name','description','age_req','duration','release_date'];
+    protected $fillable=['name','description','age_req','duration','release_date','editable','time_allowed','value_cut'];
 }

@@ -21,6 +21,10 @@ return new class extends Migration
             $table->integer('age_req');
             $table->time('duration');
            $table->date('release_date');
+           $table->boolean('editable');
+           $table->integer('time_allowed')->nullable();
+           $table->integer('value_cut')->nullable();
+           
             $table->timestamps();
 
         });

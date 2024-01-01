@@ -16,9 +16,9 @@ class PublicOffer extends Model
       return $this->belongsToMany(Snack::class,'offer_snack','PU_id','S_id');
   }
 
-public function Showtimes(){
+public function Showtime(){
 
-   return $this->hasMany(Showtime::class,'PU_id','PU_id');
+   return $this->hasOne(Showtime::class,'PU_id','PU_id');
 }
  
   

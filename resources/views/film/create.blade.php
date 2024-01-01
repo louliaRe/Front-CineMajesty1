@@ -41,6 +41,21 @@
             <label for="video_path">Film Video (Trailer)</label>
             <input type="file" name="video_path" class="form-control-file" required accept="video/*">
         </div>
+        <div class="form-group">
+            <label for="editable">editable</label>
+            <input type="text" name="editable" class="form-control" default="no"  required>
+        </div>
+
+        <div class="form-group">
+            <label for="value_cut">value cut</label>
+            <input type="text" name="value_cut" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="time_allowed">time allowed </label>
+            <input type="time" name="time_allowed" class="form-control" required>
+        </div>
+        
 
       
 <div class="form-group">
@@ -61,7 +76,7 @@
         <label for="release_date">Select start Dates:</label><br>
             <input type="date" name="release_date" class="form-control" required>
         <button type="submit" class="btn btn-primary">Create Film</button>
-    </form>
+    </form> 
     
 @if (session('success'))
     <div class="alert alert-success">

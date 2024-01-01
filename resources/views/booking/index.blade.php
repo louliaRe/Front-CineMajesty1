@@ -32,20 +32,21 @@
                 <td>{{ $booking->H_id}} </td>
                
                 <td>
-                    <form action="{{route('booking.delete',['B_id'=>$booking->B_id])}}" method="POST">
+                    <form action="{{route('booking.delete',['B_id'=>$booking->B_id, 'F_id'=>$booking->F_id])}}" method="POST">
                     @csrf
                    @method('DELETE')
                    <button type="submit">delete</button>
                     </form>
                 </td>
                 <td>
-                <form action="{{route('booking.edit',['B_id'=>$booking->B_id,'SHT_id'=>$booking->SHT_id,'H_id'=>$booking->H_id])}}" method="GET">
+                <form action="{{route('booking.edit',['B_id'=>$booking->B_id,'SHT_id'=>$booking->SHT_id,'H_id'=>$booking->H_id ,'F_id'=>$booking->F_id])}}" method="GET">
                     @csrf
                   
                    <button type="submit">update</button>
+                </form>
                 </td>
              
-            </td>
+            
             </tr>
         @endforeach
     </tbody>
