@@ -1,0 +1,18 @@
+.card {
+    position: relative;
+    margin-left: 200px;
+    
+    background-color: var(--mantine-color-gray-1);
+    padding: 15px;
+    height: 400px;
+    width: 500px;
+    border-style: double;
+    align-content: center;
+    border-radius: 30;
+    border-color: var(grap);
+    overflow: hidden;
+    box-shadow: var(--mantine-color-grap);
+ 
+}
+
+ 

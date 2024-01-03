@@ -1,0 +1,98 @@
+.navbar {
+    background-color: var(--mantine-color-white);
+    height: 750px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #DEE2E6;
+  }
+  
+  .wrapper {
+    display: flex;
+    flex: 1;
+  }
+  
+  .aside {
+    flex: 0 0 60px;
+    background-color: var(--mantine-color-body);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid #DEE2E6;
+  }
+  
+  .main {
+    flex: 1;
+    background-color:var(--mantine-color-gray-0);
+  }
+  
+  .mainLink {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--mantine-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:var(--mantine-color-gray-7);
+  
+    &:hover {
+      background-color: #FF00A1;
+      color: whitesmoke;
+    }
+  
+    &[data-active] {
+      &,
+      &:hover {
+        background-color: #FF00A1;
+        color: whitesmoke;
+      }
+    }
+  }
+  
+  .title {
+    font-family: Greycliff CF, var(--mantine-font-family);
+    margin-bottom: var(--mantine-spacing-xl);
+    background-color: var(--mantine-color-body);
+    padding: var(--mantine-spacing-md);
+    padding-top: 18px;
+    height: 60px;
+    border-bottom: 1px solid #DEE2E6;
+  }
+  
+  .logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 60px;
+    padding-top: var(--mantine-spacing-md);
+    border-bottom: 1px solid #DEE2E6;
+    margin-bottom: var(--mantine-spacing-xl);
+  }
+  
+  .link {
+    display: block;
+    text-decoration: none;
+    border-top-right-radius: var(--mantine-radius-md);
+    border-bottom-right-radius: var(--mantine-radius-md);
+    color: var(--mantine-color-gray-7);
+    padding: 0 var(--mantine-spacing-md);
+    font-size: var(--mantine-font-size-sm);
+    margin-right: var(--mantine-spacing-md);
+    font-weight: 500;
+    height: 44px;
+    line-height: 44px;
+  
+    &:hover {
+      background-color: #FF00A1;
+      color: white;
+    }
+  
+    &[data-active] {
+      &,
+      &:hover {
+        border-left-color: var(--mantine-color-gray-0-filled);
+        background-color: #FF00A1;
+        color: var(--mantine-color-white);
+      }
+    }
+  }

@@ -1,20 +1,62 @@
 {
-    "private": true,
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build"
-    },
-    "devDependencies": {
-        "@popperjs/core": "^2.11.6",
-        "axios": "^1.1.2",
-        "bootstrap": "^5.2.3",
-        "laravel-vite-plugin": "^0.7.2",
-        "lodash": "^4.17.19",
-        "postcss": "^8.1.14",
-        "sass": "^1.56.1",
-        "vite": "^4.0.0"
-    },
-    "dependencies": {
-        "resumablejs": "^1.1.0"
-    }
+  "name": "myapp",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mantine/carousel": "^7.1.3",
+    "@mantine/code-highlight": "^7.3.2",
+    "@mantine/core": "^7.1.3",
+    "@mantine/dates": "^7.1.3",
+    "@mantine/ds": "^7.1.3",
+    "@mantine/form": "^7.1.3",
+    "@mantine/hooks": "^7.1.3",
+    "@mantine/modals": "^7.1.3",
+    "@material/button": "^14.0.0",
+    "@mui/icons-material": "^5.14.18",
+    "@mui/material": "^5.14.18",
+    "@tabler/icons-react": "^2.42.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.2",
+    "dayjs": "^1.11.10",
+    "embla-carousel-react": "^8.0.0-rc17",
+    "faker": "^6.6.6",
+    "icons-react": "^3.7.1",
+    "react": "^18.2.0",
+    "react-date-picker": "^10.6.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.19.0",
+    "react-scripts": "5.0.1",
+    "react-seat-picker": "^1.5.3",
+    "react-tooltip": "4.2.21",
+    "styled-components": "^6.1.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }

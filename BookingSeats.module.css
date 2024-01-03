@@ -1,0 +1,32 @@
+.row {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .seat {
+    width: 30px;
+    height: 25px;
+    margin: 5px;
+    background-color: black;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+  }
+  
+  .seat-container {
+    margin-top: 20px;
+  }
+  
+  .unavailable {
+    background-color: grey; /* Style for unavailable seats */
+    cursor: not-allowed; /* Change cursor for unavailable seats */
+  }
+  
+  .selected {
+    background-color: rgb(255, 0, 157); /* Style for selected seats */
+  }
+  
