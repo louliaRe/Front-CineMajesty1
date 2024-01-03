@@ -53,7 +53,7 @@
 
         <div class="form-group">
             <label for="time_allowed">time allowed </label>
-            <input type="time" name="time_allowed" class="form-control" required>
+            <input type="number" name="time_allowed" class="form-control" min="1" required>
         </div>
         
 

@@ -13,12 +13,11 @@ class SeatShowtime  extends Model
     protected $table='seat_showtime';
     protected $primaryKey='SS_id';
 
-    public function Ticket(){
- 
-       return $this->belongsTo(Ticket::class,'SS_id','SS_id');
+    public function Booking(){
 
-}
+        return $this->belongsto(Booking::class,'B_id','B_id');
+    }
 
 protected $fillable=['status'];
 
-}
+} 

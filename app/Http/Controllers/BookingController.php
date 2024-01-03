@@ -26,8 +26,7 @@ class BookingController extends Controller
   public function index(){
     $email=auth()->user()->email;
     $C_id=Customer::where('email',$email)->first()->C_id;
-    $bookings = Booking::join('tickets', 'tickets.B_id', '=', 'bookings.B_id')
-    ->join('seat_showtime', 'seat_showtime.SS_id', '=', 'tickets.SS_id')
+    $bookings = Booking::join('seat_showtime', 'seat_showtime.B_id', '=', 'bookings.B_id')
     ->join('hall_showtime', 'hall_showtime.HS_id', '=', 'seat_showtime.HS_id')
     ->join('show_times', 'show_times.SHT_id', '=', 'hall_showtime.SHT_id')
     ->join('shows', 'shows.SH_id', '=', 'show_times.SH_id')
@@ -125,19 +124,15 @@ class BookingController extends Controller
 
           foreach ($seats as $seat) {
               // Apply a lock on the seat record
-       
-                        
               $seat = SeatShowtime::where('SS_id', $seat)->lockForUpdate()->first();
   
               if ($seat && $seat->status === 'available') {
                   // Process the booking
                   $seat->status = 'booked';
+                  $seat->B_id = $b ->B_id; 
                   $seat->save();
 
-                  $ticket=Ticket::create([
-                    'B_id'=>$bID,
-                    'SS_id'=>$seat->SS_id
-                  ]); 
+               
                   $ticket_total=0;
                   $ticket_total+=$ticket_price; 
                 
@@ -404,7 +399,7 @@ class BookingController extends Controller
     }
   }
    
-    $seats=SeatShowtime::join('tickets','seat_showtime.SS_id','=','tickets.SS_id')->join('bookings','tickets.B_id','=','bookings.B_id')
+    $seats=SeatShowtime::join('bookings','seat_showtime.B_id','=','bookings.B_id')
    ->where('bookings.B_id',$B_id)->select('seat_showtime.*')->get();
 
     foreach($seats as $seat){
@@ -413,7 +408,11 @@ class BookingController extends Controller
       $seat->save();
 
     }
-    $total=$booking->total/$film->value_cut;
+    $total=$booking->total ;
+    if($film->value_cut != null){
+    $total=$booking->total * $film->value_cut/ 100 ;
+    }
+    
    $amount=$wallet->amount;
   
     $wallet->update(['amount'=>$amount+$total]);
@@ -446,8 +445,7 @@ public function edit($B_id,$SHT_id,$H_id,$F_id){
     ->where('hall_showtime.H_id',$H_id)    
     ->get();
   $snacks=Snack::orderBy('name')->get();
-  $booked_seats=SeatShowtime::join('tickets','tickets.SS_id','=','seat_showtime.SS_id')
-  ->join('bookings','bookings.B_id','=','tickets.B_id')
+  $booked_seats=SeatShowtime::join('bookings','bookings.B_id','=','seat_showtime.B_id')
   ->where('bookings.B_id',$B_id)
   ->get();
   $booked_snacks=Snack::join('book_snack','book_snack.S_id','=','snacks.S_id')
@@ -465,8 +463,7 @@ public function update($B_id,$H_id,$SHT_id,$F_id,Request $request){
  $film=Film::find($F_id);
 //  dd($film);
  if($film->editable == 1){
- $booking_seats=SeatShowtime::join('tickets','tickets.SS_id','=','seat_showtime.SS_id')
-->join('Bookings','Bookings.B_id','=','tickets.B_id')
+ $booking_seats=SeatShowtime::join('Bookings','Bookings.B_id','=','seat_showtime.B_id')
 ->where('bookings.B_id',$B_id)
 ->get();
 
@@ -551,12 +548,9 @@ else{
  
     $new_seat=SeatShowtime::where('SS_id',$updatedSeat)->first();
     if(!in_array($updatedSeat,$old_seats) && $new_seat->status == 'available'){
-      $ticket=Ticket::create([
-            'B_id'=>$B_id,
-            'SS_id'=>$updatedSeat
-          ]);
         
-          $new_seat->update(['status'=>'booked']);
+          $new_seat->update(['status'=>'booked','B_id'=>$B_id]);
+          
           $new_seat->save();    
   }
   
@@ -567,12 +561,9 @@ else{
     if(!in_array($booking_seat->SS_id,$updatedSeats)){
       $old_seat=SeatShowtime::where('SS_id',$booking_seat->SS_id)->first();
       
-      $old_seat->update(['status'=>'available']);
+      $old_seat->update(['status'=>'available','B_id'=>null]);
       $old_seat->save();
-      Ticket::join('seat_showtime','seat_showtime.SS_id','=','tickets.SS_id')
-      ->where('tickets.SS_id',$old_seat->SS_id)
-      ->delete();
-      
+     
     }
 
   }
@@ -1020,8 +1011,15 @@ else{
       
     }
   }
+  if($film->value_cut != null){
 
-  $new_total=$snack_total+$seat_total / $film->value_cut;
+  $new_total=$snack_total+$seat_total ;
+  $new_total=$new_total *  $film->value_cut / 100;
+  }
+else{
+  $new_total=$snack_total+$seat_total ;
+
+}
   if($booking->total > $new_total){
 
     $differance = $booking->total - $new_total;

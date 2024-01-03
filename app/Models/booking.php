@@ -11,10 +11,7 @@ class Booking extends Model
     
     protected $table='bookings';
     protected $primaryKey='B_id';
-    public function Tickets(){
-
-        return $this->hasMany(Ticket::class,'T_id','T_id');
-    }
+ 
     public function Customer(){
 
         return $this->belongsto(Customer::class,'C_id','C_id');
@@ -23,10 +20,11 @@ class Booking extends Model
 
         return $this->belongstomany(Snack::class,'Book_Snack','B_id','S_id');
     }
-    public function BookingQueue(){
-        return $this->HasMany(BookingQueue::class,'B_id','B_id');
+
+    public function SeatShowtimes(){
+        return $this->HasMany(SeatShowtime::class,'B_id','B_id');
+
     }
-    
 protected $fillable=['C_id','total'];
     
     

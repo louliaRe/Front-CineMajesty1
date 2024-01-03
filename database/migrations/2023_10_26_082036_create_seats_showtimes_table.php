@@ -18,14 +18,20 @@ return new class extends Migration
 
               $table->unsignedBigInteger('SE_id');
             $table->unsignedBigInteger('HS_id');
-        
+            $table->unsignedBigInteger('B_id')->nullable();
 
             $table->enum('status',['available','booked'])->default('available');
+          
             $table->timestamps();
            
             
         
             // Define the foreign key constraint
+            $table->foreign('B_id')
+            ->references('B_id') // Match the column name in the role table
+            ->on('bookings')
+            ->onDelete('cascade')->onUpdate('cascade');
+
             $table->foreign('SE_id')
                   ->references('SE_id') // Match the column name in the role table
                   ->on('seats')

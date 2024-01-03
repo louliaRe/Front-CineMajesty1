@@ -63,15 +63,36 @@ public function store(Request $request)
   $value=0;
   if($edit == 'no'){
     $value = 0 ;
-  }
-  else{
-    $value = 1;
-  }
-
+    
     $fil_check=Film::where('name',$data['name'])->first();
 
     if (!$fil_check){
-            
+        
+    $film = Film::create([
+        'name' => $data['name'],
+        'description' => $data['description'],
+        'age_req' => $data['age_req'],
+        'release_date' => $data['release_date'],
+        'duration' => $data['duration'],
+        'editable'=> $value
+    ]);
+
+  $film->save();
+ 
+}
+else {
+    return redirect('/employee/film/create')->with('error', 'Invalid date range.');
+}
+
+  
+  }
+  else{
+    $value = 1;
+    
+    $fil_check=Film::where('name',$data['name'])->first();
+
+    if (!$fil_check && $request->input('value_cut') && $request->input('time_allowed')){
+        
     $film = Film::create([
         'name' => $data['name'],
         'description' => $data['description'],
@@ -86,7 +107,12 @@ public function store(Request $request)
   $film->save();
   
   
+  }
 
+  else {
+    return redirect('/employee/film/create')->with('error', 'Invalid date range.');
+}
+  }
     $geners = $request->input('gener', []);
     $film->Genres()->attach($geners);
 
@@ -100,10 +126,8 @@ public function store(Request $request)
 
     return redirect()->route('cast.create',['id'=>$id]);
 }
-     else {
-        return redirect('/employee/film/create')->with('error', 'Invalid date range.');
-    }
-}
+  
+
 
 public function index(){
     $films=Film::all();
